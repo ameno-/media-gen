@@ -57,6 +57,28 @@ Three stone figures on a misty mountain peak. A golden dawn breaks behind them. 
 
 ---
 
+### B4: The Star Map
+*Predictions, vision, scope, overview, direction*
+
+Constellation arcs on a deep indigo night sky. Stars forming patterns. A robed figure with an astrolabe looks up.
+
+![Star Map](examples/b4-star-map_001.jpg)
+
+**Prompt**: A deep indigo night sky filled with hundreds of stars, five major constellation arcs crossing the heavens. [YOUR SUBJECT] shaped by the constellation paths. A glowing celestial equator divides the sky. Hyper-detailed astronomy chart meets epic fantasy. Rich indigo, gold, amber, teal. No text, no logos.
+
+---
+
+### B5: The Forge Below
+*Building, making, construction, creation, engineering*
+
+A vast underground forge. Amber light pours from a crack in the ceiling. An anvil, sparks, and smoke. Ancient craftsmanship.
+
+![Forge Below](examples/b5-forge-below_001.jpg)
+
+**Prompt**: A vast underground forge carved into dark stone, a crack in the ceiling revealing a twilight sky and letting in shafts of golden light. [YOUR SUBJECT] resting upon the central anvil. A figure works at a side forge, sparks rising into darkness. Epic fantasy, hyper-detailed, warm and dramatic. No text, no logos.
+
+---
+
 ### B6: The Deep Current
 *Data, flow, streams, pipelines, distribution*
 
