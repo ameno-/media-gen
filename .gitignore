@@ -1,0 +1,42 @@
+# Environment and config (contains API keys)
+config.sh
+.env
+.env.local
+*.env
+
+# Generated images
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Node artifacts
+node_modules/
+*.log
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Output directories
+output/
+generated/
+downloads/
