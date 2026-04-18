@@ -1,8 +1,74 @@
 # media-gen
 
-One skill, multiple image generation backends, whimsical default aesthetic.
+Epic fantasy banner generation for AI agents. One skill, multiple backends, no aesthetic re-explaining.
 
-A shared image generation system for AI coding agents. Route to the right backend (OpenRouter, Codex CLI, MiniMax CLI, ChatGPT) without re-explaining the aesthetic every session.
+## What It Does
+
+- **Prompts live here, not in your head.** Load the skill into any AI agent and it knows the aesthetic.
+- **Pick any style, generate anywhere.** The image gen step is generic — use whatever tool is available.
+- **Easy to extend.** Add new styles by filling in a template.
+
+## The Aesthetic
+
+Epic fantasy meets technical content. Massive scale, atmospheric depth, warm amber light against dark teal shadows. Grand scale with intimate human presence.
+
+```
+Deep teal:      #2a5a6a   (sky, water, shadows)
+Dusk plum:      #8a5a6a   (accent, depth)
+Golden amber:   #d4a574   (light, warmth)
+Warm cream:     #e8dcc4   (stone, parchment)
+Dark indigo:    #1a1a2a   (deep background)
+```
+
+## Style Gallery
+
+Each style is a prompt template. Customize `[YOUR SUBJECT]` to match your content.
+
+### B1: The Gilded Mechanism
+*Code, engineering, agents, tools, architecture*
+
+A massive brass gear suspended above dark teal water at twilight. Ancient machinery meets golden amber light.
+
+![Gilded Mechanism](examples/b1-gilded-mechanism_001.jpg)
+
+**Prompt**: A single massive brass gear, thirty meters wide, suspended above dark teal water at twilight. [YOUR SUBJECT] integrated subtly into the gear's surface — [DESCRIBE HOW]. A tiny hooded figure stands on the gear's edge. Golden amber light catches the gear's teeth. Deep teal water below reflects the light. Cinematic, epic fantasy, hyper-detailed. No text, no logos.
+
+---
+
+### B2: The Flooded Archive
+*Context, knowledge, memory, search, documentation*
+
+A vast underground library flooded with dark water. Lanterns glow. Ancient scrolls float on the surface.
+
+![Flooded Archive](examples/b2-flooded-archive_001.jpg)
+
+**Prompt**: A vast underground stone archive, its floor submerged in dark water that reflects the warm glow of floating lanterns above. [YOUR SUBJECT] — [DESCRIBE] — visible on ancient scrolls floating on the water. A single figure in scholar's robes rows a small boat through the waterway. Epic fantasy, surreal, hyper-detailed. No text, no logos.
+
+---
+
+### B3: The Observatory Throne
+*Agents, strategy, planning, leadership*
+
+Three stone figures on a misty mountain peak. A golden dawn breaks behind them. Monumental, serene.
+
+![Observatory Throne](examples/b3-observatory-throne_001.jpg)
+
+**Prompt**: Three monumental stone figures, each seated on a simple throne, arranged on a narrow mountain peak above an endless sea of mist. A golden dawn light breaks behind distant mountains. [YOUR SUBJECT] glows faintly in each figure's hands. Mist fills the valley below. Epic fantasy, monumental scale, contemplative. No text, no logos.
+
+---
+
+### B6: The Deep Current
+*Data, flow, streams, pipelines, distribution*
+
+An underground river carrying glowing lights through a vast stone cavern. Data as luminescent creatures.
+
+![Deep Current](examples/b6-deep-current_001.jpg)
+
+**Prompt**: A vast underground stone cavern, a wide river rushing through it. The water carries hundreds of small glowing lights — [YOUR SUBJECT] — drifting like luminescent river creatures downstream. Ancient stone arches. A robed figure watches the lights float past. Epic fantasy, surreal, atmospheric. No text, no logos.
+
+---
+
+More styles in [`skills/media-creation/STYLES.md`](skills/media-creation/STYLES.md).
 
 ## Quick Start
 
@@ -16,93 +82,40 @@ cp config.example.sh config.sh
 # 2. Source your config
 source config.sh
 
-# 3. Generate an image
-# OpenRouter
-python adapters/openrouter_image.py "A whimsical alchemist's workshop" -o output.png
+# 3. Generate (pick your tool)
+mmx image generate --prompt "Your prompt" --aspect-ratio 16:9
 
-# MiniMax
-mmx image generate --prompt "A whimsical alchemist's workshop" --aspect-ratio 16:9
+# or
+python adapters/openrouter_image.py "Your prompt" -o output.png -a 16:9
 
-# Codex
-codex exec "$imagegen generate a whimsical alchemist's workshop"
+# or
+codex exec "$imagegen generate your prompt"
 ```
 
-## What You Get
+## Adding a New Style
 
-- **`SKILL.md`** — The skill file. Load it into any AI agent (Letta, Claude Code, etc.) and it routes generation to the right backend automatically.
-- **`STYLES.md`** — 9 style families with full prompts (Whimsical default, plus Historical Mysticism, Painterly/Surrealist, Technical Blog)
-- **`SERVICES.md`** — How to call each backend
-- **`adapters/`** — Standalone adapter scripts (no external dependencies beyond httpx)
+Copy `docs/STYLE-TEMPLATE.md` to `skills/media-creation/` and fill it in. Every style needs:
 
-## The Skill System
+1. A name and clear use case
+2. A descriptive prompt template with `[YOUR SUBJECT]` and `[DESCRIBE HOW]` placeholders
+3. Example output (generated image in `examples/`)
+4. Service notes if the style works better on a specific backend
 
-The core idea: prompts and routing live in the skill, not in your head.
-
-```
-You: "generate a banner for my post"
-Agent loads: SKILL.md
-Agent checks: Whimsical = default → Codex CLI
-Agent asks: "Which Whimsical variant — illuminated, steampunk, celestial, folk-art, or nautical?"
-You: "illuminated"
-Agent uses: Guild Ledger prompt from STYLES.md → Codex CLI
-```
-
-No re-explaining. No prompting the aesthetic from scratch every time.
-
-## Style Families
-
-| Style | Character | Backend |
-|---|---|---|
-| **Whimsical** (5 variants) | Historical fantasy, warm literary | Codex CLI |
-| Historical Mysticism | Ancient observatories, scholars | OpenRouter |
-| Painterly / Surrealist | Bierstadt meets Beksiński | ChatGPT + reference |
-| Technical Blog | Clean, brand-consistent | OpenRouter |
-
-See [`skills/media-creation/STYLES.md`](skills/media-creation/STYLES.md) for full prompts.
+See [`docs/STYLE-TEMPLATE.md`](docs/STYLE-TEMPLATE.md) for the template.
 
 ## AI Agent Integration
 
 ### Letta Code
-
-Copy `skills/media-creation/` to your Letta skills directory:
-
 ```bash
 cp -r skills/media-creation ~/.letta/skills/
 ```
 
-The skill loads `STYLES.md` and `SERVICES.md` from the same directory.
-
 ### Claude Code
-
-Copy to your Claude Code skills:
-
 ```bash
 cp -r skills/media-creation ~/.claude/skills/
 ```
 
-Invoke: `/media-creation` or load it as a general skill.
-
-### Other Agents
-
-The skill files are plain Markdown. Any agent that supports custom skills can load them. The key files:
-
-1. **`SKILL.md`** — Entry point, routing logic, defaults
-2. **`STYLES.md`** — All style prompts
-3. **`SERVICES.md`** — How to call each backend
-
-## Security
-
-**No API keys in this repo.** All keys are environment variables.
-
-```
-OPENROUTER_API_KEY   # OpenRouter image generation
-OPENAI_API_KEY       # Codex CLI batch mode / DALL-E API
-MINIMAX_API_KEY      # MiniMax CLI
-```
-
-Copy `config.example.sh` → `config.sh`, fill in your keys, **never commit `config.sh`**.
-
-See [`.gitignore`](.gitignore) for everything that stays out of version control.
+The skill loads `STYLES.md` from the same directory. Say "generate a banner" and the agent picks the right style prompt, generates with whatever tool is available.
 
 ## File Structure
 
@@ -111,19 +124,33 @@ media-gen/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
-├── config.example.sh      # Template — copy to config.sh, fill in keys
+├── config.example.sh
 ├── skills/
 │   └── media-creation/
-│       ├── SKILL.md       # Routing logic, defaults, entry point
-│       ├── STYLES.md      # All 9 style families with prompts
-│       └── SERVICES.md    # How to call each backend
+│       ├── SKILL.md       # Entry point, style picker
+│       ├── STYLES.md      # All style prompts
+│       └── SERVICES.md    # Tool invocation
 ├── adapters/
-│   └── openrouter_image.py  # Standalone OpenRouter adapter
-└── docs/
-    ├── SETUP.md           # Detailed setup guide
-    └── CLI-INTEGRATION.md # Agent-specific setup
+│   └── openrouter_image.py
+├── docs/
+│   ├── SETUP.md
+│   ├── CLI-INTEGRATION.md
+│   └── STYLE-TEMPLATE.md  # ← Add new styles here
+└── examples/             # Generated example outputs
 ```
+
+## Security
+
+No API keys in this repo. All keys are environment variables.
+
+```bash
+OPENROUTER_API_KEY   # OpenRouter (Nano Banana, Flux, GPT5 Image)
+OPENAI_API_KEY       # Codex CLI batch / DALL-E
+MINIMAX_API_KEY      # MiniMax CLI
+```
+
+Copy `config.example.sh` → `config.sh`, fill in keys, **never commit**.
 
 ## License
 
-MIT — use it, adapt it, make it yours.
+MIT

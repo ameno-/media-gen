@@ -1,26 +1,25 @@
 ---
 name: media-creation
 description: |
-  Unified image generation skill. Routes to the right backend (OpenRouter/Nano Banana,
-  Codex CLI, MiniMax CLI, ChatGPT/DALL-E) based on style. Whimsical aesthetic is the
-  default. Loads STYLES.md for prompt templates and SERVICES.md for invocation details.
+  Epic fantasy banner generation for AI agents. Loads STYLES.md for prompt templates,
+  picks the best available tool from SERVICES.md. No aesthetic re-explaining.
   Use when: generating any image, banner, illustration, or creative asset.
 ---
 
 # Media Creation
 
-Abstracted image generation — one skill, multiple backends, whimsical default.
+Epic fantasy banner generation — prompts live here, not in your head.
 
-## The One Rule
+## The Core Idea
 
-**Whimsical is the default aesthetic.** If you say "generate X" without specifying a style, go whimsical first. Ask one clarifying question only if the content genuinely needs a different treatment.
+Load this skill → agent knows the aesthetic. You say "generate a banner" → agent picks the right style prompt and generates with whatever tool is available.
 
-## The Security Model
+## Security Model
 
-**No API keys are ever in this repo.** All keys live in environment variables:
-- `OPENROUTER_API_KEY` — OpenRouter image generation
-- `OPENAI_API_KEY` — Codex CLI batch mode / DALL-E API
-- `MINIMAX_API_KEY` — MiniMax CLI (if using mmx with auth)
+**No API keys in this repo.** All keys are environment variables:
+- `OPENROUTER_API_KEY` — OpenRouter (Nano Banana, Flux, GPT5 Image)
+- `OPENAI_API_KEY` — Codex CLI batch mode / DALL-E
+- `MINIMAX_API_KEY` — MiniMax CLI
 
 See `config.example.sh` for the full variable list.
 
@@ -28,71 +27,70 @@ See `config.example.sh` for the full variable list.
 
 ```
 1. What is this for?
-   └── Blog banner        → Technical Blog style (OpenRouter)
-   └── Standalone creative → Whimsical (default) → Codex CLI
-   └── Editorial asset     → See STYLES.md asset type guide
-   └── Not sure            → Whimsical, ask which variant
+   └── Banner / header image  → Pick from STYLES.md
+   └── Editorial illustration → Pick from STYLES.md
+   └── Avatar / icon          → Custom prompt, 1:1 aspect ratio
+   └── Not sure               → B1 Gilded Mechanism (code/engineering) or B2 Flooded Archive (knowledge/docs)
 
-2. What style?
-   └── No preference       → Whimsical (DEFAULT)
-   └── "something like X"  → Match to closest Whimsical variant
-   └── "technical"         → Technical Blog
-   └── "medieval/old map"  → Navigator's Chart
-   └── "Victorian/steampunk" → Clockwork Mechanism
-   └── "illuminated"       → Guild Ledger
-   └── "celestial/star map" → Constellation Map
-   └── "folk art/loom"     → Enchanted Loom
-   └── "surreal/painterly" → Painterly / Surrealist
-   └── "scholarly/ancient" → Historical Mysticism
+2. What style fits the content?
+   └── Code, engineering, systems → B1 Gilded Mechanism
+   └── Context, knowledge, docs  → B2 Flooded Archive
+   └── Agents, strategy, planning → B3 Observatory Throne
+   └── Predictions, vision       → B4 Star Map
+   └── Building, construction     → B5 Forge Below
+   └── Data, flow, streams      → B6 Deep Current
+   └── Surreal, narrative        → PS Painterly
+   └── Clean, editorial          → TB Technical Clean
 
-3. Which service?
-   └── See SERVICES.md — service is determined by style, not manually chosen
+3. Which tool to use?
+   └── Pick whichever is available and has quota:
+       - MiniMax CLI: mmx image generate --prompt "..." --aspect-ratio 16:9
+       - OpenRouter:  python adapters/openrouter_image.py "..." -o out.png -a 16:9
+       - Codex CLI:   codex exec "$imagegen generate ..."
+       - ChatGPT:    chat.openai.com (web UI, for reference images)
 ```
 
-## Style Families (Quick Reference)
+## Style Quick Reference
 
-| Style | Character | Service |
-|---|---|---|
-| Whimsical (DEFAULT) | Historical fantasy, warm, literary | Codex CLI |
-| Guild Ledger | Medieval illuminated manuscript | Codex CLI |
-| Clockwork Mechanism | Victorian steampunk | Codex CLI |
-| Constellation Map | Celestial cartography | Codex CLI |
-| Enchanted Loom | Folk-art magical | Codex CLI |
-| Navigator's Chart | Age of exploration | Codex CLI |
-| Historical Mysticism | Ancient observatories, scholars | OpenRouter |
-| Painterly / Surrealist | Bierstadt meets Beksiński | ChatGPT + reference |
-| Technical Blog | Clean, brand-consistent | OpenRouter |
+| Style | Use for |
+|---|---|
+| B1 Gilded Mechanism | Code, engineering, agents, tools |
+| B2 Flooded Archive | Context, knowledge, memory, docs |
+| B3 Observatory Throne | Agents, strategy, planning |
+| B4 Star Map | Predictions, vision, overview |
+| B5 Forge Below | Building, construction, crafts |
+| B6 Deep Current | Data, flow, streams, pipelines |
+| PS Painterly | Surreal, narrative, layered |
+| TB Technical Clean | Clean editorial, diagrams |
 
-Full prompts → `STYLES.md` | Service details → `SERVICES.md`
+Full prompts → `STYLES.md` | Tool invocation → `SERVICES.md`
 
 ## How to Ask Questions
 
-When clarification is needed, ask **one question with clear choices**.
+Ask one clarifying question with clear choices when the content could fit multiple styles.
 
-**Good**: "Whimsical — which variant: illuminated manuscript, steampunk clockwork, celestial map, or age-of-exploration nautical chart?"
+**Good**: "Context engineering post — B2 Flooded Archive (library/water) or B1 Gilded Mechanism (gears/systems)?"
 
-**When not to ask**: If the content is obviously whimsical in nature ("an illustration of a curious explorer"), use Whimsical and pick the closest variant.
+**When not to ask**: If the content topic clearly maps to one style, just use it.
 
-## Service Invocation
+## Adding New Styles
 
-See `SERVICES.md` for detailed invocation. Adapters are in `adapters/`:
-
-| Backend | Adapter | Invocation |
-|---|---|---|
-| OpenRouter | `adapters/openrouter_image.py` | `python adapters/openrouter_image.py "[prompt]" -o out.png` |
-| Codex CLI | Native | `codex exec "$imagegen generate..."` |
-| MiniMax CLI | Native | `mmx image generate --prompt "..."` |
-| ChatGPT | Web UI | chat.openai.com |
+See `docs/STYLE-TEMPLATE.md` for the template. Every style needs:
+1. Name, use case, vibe description
+2. Prompt template with `[YOUR SUBJECT]` placeholders
+3. Service notes if relevant
+4. Example output in `examples/`
 
 ## What This Skill Does
 
-- Composes prompts using the style templates in `STYLES.md`
-- Selects the appropriate service based on style → service mapping
-- Executes generation via the appropriate backend
-- Reports result path back
+- Loads style prompts from `STYLES.md`
+- Picks the best available tool from `SERVICES.md`
+- Composes the full prompt with user's subject matter
+- Executes generation and reports the result path
 
 ## What This Skill Does NOT Do
 
-- Manage file storage, naming, or versioning (not a file manager)
-- Hardcode any API keys or secrets (environment variables only)
+- Route styles to specific models — image gen is generic
+- Manage file storage or versioning
+- Hardcode API keys or secrets
 - Generate text, video, or audio
