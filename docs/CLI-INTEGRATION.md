@@ -6,42 +6,21 @@
 
 ```bash
 cp -r skills/media-creation ~/.letta/skills/
+cp -r skills/music-creation ~/.letta/skills/
+cp -r skills/manim-video ~/.letta/skills/
+cp -r skills/promo-pack ~/.letta/skills/
+cp -r skills/lesson-pack ~/.letta/skills/
 ```
 
-### Loading the Skill
+### Invocation
 
-When you start a Letta session and want to generate images:
-
-```
-Load the media-creation skill.
-```
-
-Or if your Letta supports skill invocation by name:
-
-```
+```text
 /media-creation
+/music-creation
+/manim-video
+/promo-pack
+/lesson-pack
 ```
-
-The skill file `SKILL.md` is read by Letta and its routing logic becomes available.
-
-### How It Works in Letta
-
-1. Letta loads `SKILL.md` from `~/.letta/skills/media-creation/`
-2. SKILL.md references `STYLES.md` and `SERVICES.md` (same directory)
-3. You describe what you want to generate
-4. The skill routes to the appropriate backend based on style
-5. The skill executes via the adapter or native CLI
-
-### Letting Letta Handle the Aesthetic
-
-The whole point: you say "generate a banner" and Letta knows:
-- Whimsical = default
-- Whimsical → Codex CLI
-- Codex handles the generation
-
-No re-explaining the aesthetic every session.
-
----
 
 ## Claude Code
 
@@ -49,65 +28,58 @@ No re-explaining the aesthetic every session.
 
 ```bash
 cp -r skills/media-creation ~/.claude/skills/
+cp -r skills/music-creation ~/.claude/skills/
+cp -r skills/manim-video ~/.claude/skills/
+cp -r skills/promo-pack ~/.claude/skills/
+cp -r skills/lesson-pack ~/.claude/skills/
 ```
 
-### Usage
+### Invocation
 
-Claude Code will discover the skill and you can invoke it as:
-
-```
+```text
 /media-creation
+/music-creation
+/manim-video
+/promo-pack
+/lesson-pack
 ```
 
-Or load it in context and use it generically.
+## Direct CLI Usage
 
----
-
-## Direct CLI Usage (No Agent)
-
-### OpenRouter
+### MiniMax
 
 ```bash
-python adapters/openrouter_image.py "A curious alchemist" -o output.png
-
-# With options
-python adapters/openrouter_image.py "A curious alchemist" \
-  -o output.png \
-  -m google/gemini-2.5-flash-image-preview \
-  -a 16:9
+mmx image generate --prompt "Epic technical banner" --aspect-ratio 16:9
+mmx music generate --prompt "Technical cinematic bed" --instrumental --out soundtrack.mp3
+mmx speech synthesize --text "Welcome to the lesson." --out narration.mp3
 ```
 
-### MiniMax CLI
+### Manim
 
 ```bash
-mmx image generate --prompt "A curious alchemist" --aspect-ratio 16:9
-
-# Save to specific location
-mmx image generate \
-  --prompt "A curious alchemist" \
-  --out-dir ./banners \
-  --out-prefix alchemist \
-  --aspect-ratio 16:9
+bash scripts/setup_manim_env.sh
+.venv-manim/bin/python -m manim -ql path/to/script.py Scene1Question
 ```
 
-### Codex CLI
+### Pack Builder
 
 ```bash
-# Interactive
-codex "$imagegen generate a curious alchemist banner"
+python3 scripts/build_media_pack.py \
+  --pack lesson \
+  --title "Context Routing" \
+  --brief "Teach the core mechanism of context routing." \
+  --subject "knowledge flowing through a routing graph"
 
-# Non-interactive
-codex exec "$imagegen generate a curious alchemist banner"
+python3 scripts/run_pack.py --pack-dir generated/context-routing-lesson --dry-run
 ```
-
----
 
 ## Environment Variables
 
 | Variable | Required | Description |
 |---|---|---|
-| `OPENROUTER_API_KEY` | For OpenRouter | Get from openrouter.ai/keys |
-| `OPENAI_API_KEY` | For Codex batch / DALL-E | Get from platform.openai.com/api-keys |
-| `MINIMAX_API_KEY` | For mmx auth | Get from minimaxi.com/developer |
-
-All are optional — you only need the key for the backend you're using.
+| `OPENROUTER_API_KEY` | Optional | OpenRouter still generation |
+| `OPENAI_API_KEY` | Optional | OpenAI image usage |
+| `MINIMAX_API_KEY` | For `mmx` | Image, music, and speech |
+| `MEDIA_GEN_MINIMAX_VOICE` | Optional | Default TTS voice for pack builds |
+| `MEDIA_GEN_OUTPUT_DIR` | Optional | Default pack output directory |
+| `MANIM_PYTHON_BIN` | Optional | Override Manim interpreter path |

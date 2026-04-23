@@ -16,6 +16,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .Python
+.venv-manim/
 *.egg-info/
 .eggs/
 dist/
