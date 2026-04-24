@@ -1,39 +1,80 @@
 # CLAUDE.md
 
-This is a media generation skill library. The core skill lives in `skills/media-creation/`.
+Thin repo guide for AI coding agents.
 
-## Project Structure
+## What This Repo Is
 
-- `skills/media-creation/` — The skill (SKILL.md, STYLES.md, SERVICES.md)
-- `adapters/` — Standalone adapter scripts
-- `docs/` — Setup and integration guides
-- `config.example.sh` — API key template (copy to config.sh)
+Integrated media-pack workflow:
 
-## Security
+- `mmx image` for stills
+- `mmx music` for soundtrack
+- `mmx speech` for narration
+- Manim for video
+- ffmpeg for stitch/mux
 
-- Never commit API keys or config files
-- All keys are environment variables only
-- Run `source config.sh` before generating images
+Do not route video generation through `mmx video` in this repo.
 
-## Quick Commands
+## First Steps
+
+If local setup is unknown:
 
 ```bash
-# Setup
-cp config.example.sh config.sh
-# edit config.sh with your keys
-source config.sh
-
-# Generate (OpenRouter)
-python adapters/openrouter_image.py "prompt" -o output.png
-
-# Generate (MiniMax)
-mmx image generate --prompt "prompt"
-
-# Generate (Codex)
-codex exec "$imagegen generate prompt"
+python3 scripts/check_setup.py
 ```
 
-## Skill for AI Agents
+If system deps are missing:
 
-When loading this project into an AI agent, point it to `skills/media-creation/SKILL.md`.
-The skill handles routing to the right backend based on style — just describe what you want.
+```bash
+bash scripts/setup_system_deps.sh
+bash scripts/setup_manim_env.sh
+```
+
+If keys are not configured:
+
+```bash
+cp config.example.sh config.sh
+source config.sh
+```
+
+## Primary Scripts
+
+- `python3 scripts/build_media_pack.py ...` -> create pack directory, prompts, Manim project, commands
+- `python3 scripts/run_pack.py --pack-dir ... --dry-run` -> inspect full workflow
+- `python3 scripts/run_pack.py --pack-dir ... --only ...` -> run selected steps
+- `python3 scripts/generate_diagram.py --pack-dir ...` -> render diagram from DOT source
+- `python3 scripts/render_manim_pack.py --pack-dir ...` -> render/mux Manim lane directly
+- `python3 scripts/smoke_test.py` -> repo smoke test
+- `python3 scripts/check_setup.py` -> dependency/key check
+
+## Agent Routing
+
+Use these skills:
+
+- `skills/promo-pack/` for launches and promo work
+- `skills/lesson-pack/` for explainers and educational work
+- `skills/manim-video/` for video
+- `skills/music-creation/` for soundtrack
+- `skills/media-creation/` for stills
+- `skills/cover-image/` for hero stills
+- `skills/diagram-creation/` for architecture and concept diagrams
+- `skills/image-cards/` for visual card sequences
+- `skills/article-illustration/` for article visuals
+- `skills/url-to-markdown/` + `skills/format-markdown/` + `skills/markdown-to-html/` for article source and publish flow
+- `skills/compress-image/` for final optimization
+- `skills/imagine-backend/` as optional non-mmx still backend
+- `skills/motion-edit/` for stitch/mux/post
+
+## Required Keys
+
+- `MINIMAX_API_KEY` for the default workflow
+
+Optional:
+
+- `OPENROUTER_API_KEY`
+- `OPENAI_API_KEY`
+
+## Constraints
+
+- Never commit `config.sh` or secrets
+- Prefer the repo scripts over ad hoc commands
+- For equation-heavy Manim scenes, verify `latex`/`pdflatex` first

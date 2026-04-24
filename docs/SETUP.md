@@ -1,105 +1,105 @@
 # Setup Guide
 
-## Prerequisites
+## Backends
 
-At least one of:
-- **OpenRouter API key** — https://openrouter.ai/keys (for Nano Banana / Gemini 2.5 Flash Image)
-- **OpenAI API key** — https://platform.openai.com/api-keys (for Codex CLI or DALL-E)
-- **MiniMax CLI** — `npm install -g mmx` (https://www.minimaxi.com/developer)
+- `mmx image` for stills
+- `mmx music` for soundtrack
+- `mmx speech` for narration
+- Graphviz (`dot`) for architecture and concept diagrams
+- Manim for video render
+- ffmpeg for stitch and mux
+- LaTeX for `MathTex` and equation-heavy Manim scenes
 
-You don't need all three. Start with one.
-
----
-
-## Step 1: Clone and Configure
+## Step 0: Install System Dependencies
 
 ```bash
-git clone https://github.com/ameno-/media-gen.git
-cd media-gen
+bash scripts/setup_system_deps.sh
+```
+
+This installs the packages declared in `Brewfile`:
+
+- `cairo`
+- `pango`
+- `pkgconf`
+- `ffmpeg`
+- `mactex-no-gui`
+
+Notes:
+
+- The TeX cask install may require macOS admin privileges because it runs the system installer.
+- `mactex-no-gui` is the full, least-surprising option for `MathTex`, but it needs significant free disk space.
+- If disk is tight, `basictex` is the smaller fallback, but you may need extra TeX Live packages later for complex scenes.
+
+## Step 1: Configure Keys
+
+```bash
 cp config.example.sh config.sh
-```
-
-Edit `config.sh` and add your API key(s). Do not commit `config.sh`.
-
-```bash
-# In config.sh
-export OPENROUTER_API_KEY="sk-or-v1-your-key-here"
-```
-
----
-
-## Step 2: Source Your Config
-
-```bash
-source config.sh
-# Or add to your .bashrc / .zshrc:
-echo 'source /path/to/media-gen/config.sh' >> ~/.zshrc
-```
-
----
-
-## Step 3: Test the Adapter
-
-```bash
-# Test OpenRouter
-python adapters/openrouter_image.py "A small glowing flask" -o test.png
-
-# Test MiniMax (if installed)
-mmx image generate --prompt "A small glowing flask" --aspect-ratio 1:1
-
-# Test Codex (if installed)
-codex exec "$imagegen generate a small glowing flask"
-```
-
----
-
-## Step 4: Install in Your AI Agent
-
-### Letta Code
-
-```bash
-cp -r skills/media-creation ~/.letta/skills/
-```
-
-Restart your Letta session or trigger a recompile. The skill loads automatically when invoked.
-
-### Claude Code
-
-```bash
-cp -r skills/media-creation ~/.claude/skills/
-```
-
-Use `/media-creation` or it loads as a general skill.
-
----
-
-## Dependencies
-
-The OpenRouter adapter requires only `httpx`:
-
-```bash
-pip install httpx
-# or
-uv pip install httpx
-```
-
-No other dependencies.
-
----
-
-## Troubleshooting
-
-### "OPENROUTER_API_KEY not set"
-
-You forgot to source your config:
-```bash
 source config.sh
 ```
 
-### "Rate limit exceeded"
+## Step 2: Verify MiniMax
 
-You've hit OpenRouter's rate limit. Wait a moment, or use Codex CLI or MiniMax CLI as a fallback.
+```bash
+mmx auth status
+mmx image --help
+mmx music generate --help
+mmx speech synthesize --help
+```
 
-### Codex CLI not generating images
+## Step 3: Set Up Manim
 
-Make sure you're in a Codex session with image generation enabled. Use `codex --help` to verify installation.
+Create a local virtualenv for video work:
+
+```bash
+bash scripts/setup_manim_env.sh
+```
+
+This creates `.venv-manim/` and installs `manim` there.
+
+If you only need the OpenRouter adapter, install its Python dependency with:
+
+```bash
+python3 -m pip install -r requirements.txt --break-system-packages
+```
+
+## Step 4: Verify Dependencies
+
+Required for full video flow:
+
+- `ffmpeg`
+- `dot` (Graphviz, from `brew bundle` or `brew install graphviz`)
+- `.venv-manim/bin/python -m manim`
+- `latex`
+- `pdflatex`
+
+Optional but recommended for math-heavy scenes:
+
+- LaTeX (`latex` / `pdflatex`) for `MathTex`
+
+The generated starter Manim scenes in this repo do not require LaTeX. Advanced equation animations do.
+
+## Step 6: Validate Setup
+
+```bash
+python3 scripts/check_setup.py
+```
+
+## Step 5: Test the Pack Workflow
+
+```bash
+python3 scripts/smoke_test.py
+```
+
+If `.venv-manim` exists, you can also render a generated pack:
+
+```bash
+python3 scripts/build_media_pack.py \
+  --pack lesson \
+  --title "Context Routing" \
+  --brief "Teach the core mechanism of context routing." \
+  --subject "knowledge flowing through a routing graph"
+
+python3 scripts/run_pack.py \
+  --pack-dir generated/context-routing-lesson \
+  --only cover-image soundtrack narration manim-render video-mux
+```

@@ -1,0 +1,70 @@
+digraph agent_pipeline {
+    graph [
+        bgcolor="#0f172a",
+        fontname="Menlo",
+        fontsize=13,
+        fontcolor="#EAEAEA",
+        pad=0.7,
+        splines=ortho,
+        rankdir=LR,
+        label="AI Agent Skill Pipeline",
+        labelloc=t,
+        nodesep=0.5,
+        ranksep=0.85,
+    ]
+    node [
+        shape=box,
+        style="filled,rounded",
+        fillcolor="#12141A",
+        fontname="Menlo",
+        fontsize=12,
+        fontcolor="#EAEAEA",
+        color="#22d3ee",
+        penwidth=1.5,
+        margin="0.25,0.15",
+    ]
+    edge [
+        color="#94a3b8",
+        fontname="Menlo",
+        fontsize=10,
+        fontcolor="#94a3b8",
+        arrowsize=0.85,
+    ]
+
+    BRIEF  [label="Brief", color="#22d3ee", penwidth=2.5, fontsize=14]
+
+    subgraph cluster_media {
+        graph [label="Media", color="#94a3b8", style=dashed, fontcolor="#94a3b8"]
+        IMG    [label="cover-image\nstill",      color="#fbbf24", penwidth=2]
+        CARDS  [label="image-cards\nsequence",   color="#fbbf24", penwidth=2]
+        DIAG   [label="diagram\nSVG",            color="#fbbf24", penwidth=2]
+    }
+
+    subgraph cluster_motion {
+        graph [label="Motion", color="#94a3b8", style=dashed, fontcolor="#94a3b8"]
+        MANIM  [label="manim-video\nscenes",     color="#fb7185", penwidth=2]
+        MUX    [label="motion-edit\nfinal cut",  color="#fb7185", penwidth=2]
+    }
+
+    subgraph cluster_audio {
+        graph [label="Audio", color="#94a3b8", style=dashed, fontcolor="#94a3b8"]
+        MUSIC  [label="music-creation\ntrack",   color="#34d399", penwidth=2]
+        TTS    [label="narration\nvoiceover",    color="#34d399", penwidth=2]
+    }
+
+    PACK   [label="Media Pack", color="#34d399", penwidth=2.5, fontsize=14]
+
+    BRIEF -> IMG
+    BRIEF -> CARDS
+    BRIEF -> DIAG
+    BRIEF -> MANIM
+    BRIEF -> MUSIC
+    BRIEF -> TTS
+    MANIM -> MUX
+    MUSIC -> MUX
+    TTS   -> MUX
+    IMG   -> PACK
+    CARDS -> PACK
+    DIAG  -> PACK
+    MUX   -> PACK
+}

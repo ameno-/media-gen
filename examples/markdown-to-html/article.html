@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agents and Media Generation</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #12141A;
+    --primary: #22d3ee;
+    --secondary: #34d399;
+    --accent: #fbbf24;
+    --muted: #94a3b8;
+    --ink: #EAEAEA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    padding: 3rem 1.5rem;
+  }
+  article {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; color: var(--primary); margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+  h2 { font-size: 1.35rem; color: var(--accent); margin: 2rem 0 0.75rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.4rem; }
+  h3 { font-size: 1.1rem; color: var(--secondary); margin: 1.5rem 0 0.5rem; }
+  p { margin-bottom: 1rem; color: var(--ink); }
+  ul { margin: 0.5rem 0 1rem 1.5rem; }
+  li { margin-bottom: 0.35rem; color: var(--ink); }
+  code {
+    background: var(--panel);
+    color: var(--primary);
+    font-family: Menlo, monospace;
+    font-size: 0.88em;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+<article>
+<h1>Ai agents and media generation</h1>
+
+<p>So basically what happens is you give the agent a brief. It reads it. Then it decides what tools to use. Like maybe it needs an image or a video or some music. The agent picks the right skill and runs it.</p>
+
+<h2>The tools</h2>
+
+<p>Theres a bunch of tools:</p>
+<ul>
+  <li>image generation (mmx image)</li>
+  <li>music (mmx music)</li>
+  <li>narration with tts (mmx speech)</li>
+  <li>diagrams with graphviz</li>
+  <li>video with manim</li>
+  <li>stitching with ffmpeg</li>
+</ul>
+
+<h2>How it works</h2>
+
+<p>The agent gets a brief like "make a lesson about context routing". It figures out the style (flooded archive maybe). It writes prompts. It runs commands. It assembles the outputs.</p>
+
+<p>Its actually pretty simple once you see the pattern. Brief goes in, pack comes out.</p>
+
+<h2>Things to know</h2>
+
+<ul>
+  <li>dont use mmx video in this repo</li>
+  <li>always dry run first</li>
+  <li>check your keys before starting</li>
+  <li>LaTeX needs to be installed for math scenes</li>
+</ul>
+</article>
+</body>
+</html>

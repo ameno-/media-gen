@@ -1,0 +1,6 @@
+brew "cairo"
+brew "ffmpeg"
+brew "graphviz"
+brew "pango"
+brew "pkgconf"
+cask "mactex-no-gui"
