@@ -29,12 +29,12 @@ logger = logging.getLogger(__name__)
 
 
 class ImageModel(str, Enum):
-    NANO_BANANA = "google/gemini-2.5-flash-image-preview"
-    NANO_BANANA_PRO = "google/gemini-2.0-flash-image-generation"
-    FLUX_MAX = "black-forest-labs/flux-2-max"
-    FLUX_FLEX = "black-forest-labs/flux-2-flex"
+    GEMINI_FLASH = "google/gemini-2.5-flash-image"
+    GEMINI_FLASH_LEGACY = "google/gemini-2.5-flash-image-preview"
+    GEMINI_PRO = "google/gemini-3-pro-image-preview"
     GPT5_IMAGE = "openai/gpt-5-image"
     GPT5_IMAGE_MINI = "openai/gpt-5-image-mini"
+    GPT5_4_IMAGE = "openai/gpt-5.4-image-2"
 
 
 class AspectRatio(str, Enum):
@@ -55,7 +55,7 @@ class ImageSize(str, Enum):
 
 @dataclass
 class ImageConfig:
-    model: ImageModel = ImageModel.NANO_BANANA
+    model: ImageModel = ImageModel.GEMINI_FLASH
     aspect_ratio: AspectRatio = AspectRatio.LANDSCAPE
     image_size: ImageSize = ImageSize.SIZE_2K
     temperature: float = 1.0
@@ -156,7 +156,7 @@ def generate_image(
     }
 
     # Add image_config for Gemini models
-    if config.model in (ImageModel.NANO_BANANA, ImageModel.NANO_BANANA_PRO):
+    if config.model in (ImageModel.GEMINI_FLASH, ImageModel.GEMINI_FLASH_LEGACY, ImageModel.GEMINI_PRO):
         payload["image_config"] = {
             "aspect_ratio": config.aspect_ratio.value,
             "image_size": config.image_size.value,
@@ -225,7 +225,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate images via OpenRouter API")
     parser.add_argument("prompt", help="Image generation prompt")
     parser.add_argument("-o", "--output", default="generated_image.png", help="Output file")
-    parser.add_argument("-m", "--model", default=ImageModel.NANO_BANANA.value,
+    parser.add_argument("-m", "--model", default=ImageModel.GEMINI_FLASH.value,
                         choices=[m.value for m in ImageModel], help="Model")
     parser.add_argument("-a", "--aspect-ratio", default=AspectRatio.LANDSCAPE.value,
                         choices=[r.value for r in AspectRatio], help="Aspect ratio")

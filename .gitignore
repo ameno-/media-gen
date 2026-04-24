@@ -4,12 +4,18 @@ config.sh
 .env.local
 *.env
 
-# Generated images
+# Generated images (exclude examples — those are intentionally tracked)
 *.png
 *.jpg
 *.jpeg
 *.webp
 *.gif
+!examples/**/*.png
+!examples/**/*.jpg
+!examples/**/*.jpeg
+!examples/**/*.webp
+!examples/**/*.mp3
+!examples/**/*.mp4
 
 # Python artifacts
 __pycache__/

@@ -453,10 +453,18 @@ def render_diagram_dot(pack: str, title: str, subject: str) -> str:
     p = DIAGRAM_PALETTE
     t = _dot_escape(title)
     s = _dot_escape(subject)
+    if pack == "promo":
+        rankdir = "LR"
+        digraph_name = "architecture"
+    else:
+        rankdir = "TD"
+        digraph_name = "concept_flow"
+
     shared_graph = (
         f'    graph [\n'
         f'        bgcolor="{p["bg"]}", fontname="Menlo", fontsize=13,\n'
         f'        fontcolor="{p["ink"]}", pad=0.6, splines=ortho,\n'
+        f'        rankdir={rankdir},\n'
         f'        label="{t}", labelloc=t,\n'
         f'    ]\n'
         f'    node [\n'
@@ -482,7 +490,7 @@ def render_diagram_dot(pack: str, title: str, subject: str) -> str:
             f'    CORE  -> OUT_A\n'
             f'    CORE  -> OUT_B\n'
         )
-        return f'digraph architecture {{\n{shared_graph}    rankdir=LR,\n{body}}}\n'
+        return f'digraph {digraph_name} {{\n{shared_graph}{body}}}\n'
     body = (
         f'\n'
         f'    Q [{_dot_node(p["primary"], 2.0)}  label="The Question"]\n'
@@ -492,7 +500,7 @@ def render_diagram_dot(pack: str, title: str, subject: str) -> str:
         f'    Q -> M [label="leads to"]\n'
         f'    M -> R [label="reveals"]\n'
     )
-    return f'digraph concept_flow {{\n{shared_graph}    rankdir=TD,\n{body}}}\n'
+    return f'digraph {digraph_name} {{\n{shared_graph}{body}}}\n'
 
 
 def write_diagram_project(pack_dir: Path, pack: str, title: str, subject: str) -> Path:
